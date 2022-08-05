@@ -2,18 +2,14 @@ const { User } = require('../models/user');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
-    .then((users) => {
-      res.status(200).send({ data: users });
-    })
+    .then((users) => res.send({ data: users }))
     .catch(() => res.status(500).send({ message: 'Internal Server Error' }));
 };
 
 module.exports.getUserById = (req, res) => {
   User.findById(req.params.userId)
     .orFail(new Error('NotValidId'))
-    .then((user) => {
-      res.status(200).send({ data: user });
-    })
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.message === 'NotValidId') {
         return res.status(404).send({ message: 'Пользователя нет в базе' });
@@ -28,7 +24,7 @@ module.exports.getUserById = (req, res) => {
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Bad request' });
@@ -48,9 +44,7 @@ module.exports.getUserMe = (req, res) => {
     },
   )
     .orFail(new Error('NotValidId'))
-    .then((user) => {
-      res.status(200).send({ data: user });
-    })
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.message === 'NotValidId') {
         return res.status(404).send({ message: 'Пользователя нет в базе' });
@@ -72,7 +66,7 @@ module.exports.userAvatar = (req, res) => {
       runValidators: true,
     },
   )
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'Пользователя нет в базе' });
