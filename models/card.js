@@ -1,30 +1,36 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
-const cardSchema = new mongoose.Schema({
+const Card = new mongoose.Schema({
   name: {
     type: String,
-    minlength: [2, 'Минимальная длинна 2 символа'],
-    maxlength: 30,
     required: true,
+    minlength: 2,
+    maxlength: 30,
   },
   link: {
     type: String,
     required: true,
-    ref: 'link',
-  },
-  likes: {
-    type: [mongoose.Schema.Types.ObjectId],
-    default: [],
+    validate: {
+      validator: (value) => validator.isURL(value),
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
   },
+  likes: [
+    {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'user',
+      default: [],
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = mongoose.model('card', cardSchema);
+module.exports = mongoose.model('card', Card);
