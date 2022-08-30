@@ -9,11 +9,11 @@ router.use(auth);
 router.use('/users', require('./users'));
 router.use('/cards', require('./cards'));
 
+router.post('/signin', loginValidation, login);
+router.post('/signup', createUserValidation, createUser);
+
 router.use('/*', () => {
   throw new NotFoundError('Нет такой страницы');
 });
-
-router.post('/signin', loginValidation, login);
-router.post('/signup', createUserValidation, createUser);
 
 module.exports = router;

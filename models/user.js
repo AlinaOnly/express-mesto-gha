@@ -18,18 +18,20 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    validate: {
-      validator: (value) => validator.isURL(value),
-    },
     default:
       'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    validate: {
+      validator: (url) => validator.isURL(url),
+      message: 'Неправильная ссылка',
+    },
   },
   email: {
     type: String,
     required: true,
     unique: true,
     validate: {
-      validator: (value) => validator.isEmail(value),
+      validator: (email) => validator.isEmail(email),
+      message: 'Неправильная почта',
     },
   },
   password: {
@@ -42,7 +44,7 @@ const userSchema = new mongoose.Schema({
   versionKey: false,
 });
 
-userSchema.statics.findUserByCredentials = function findUser(email, password) {
+userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email })
     .select('+password')
     .then((user) => {
@@ -58,4 +60,4 @@ userSchema.statics.findUserByCredentials = function findUser(email, password) {
     });
 };
 
-module.exports.User = mongoose.model('user', userSchema);
+module.exports = mongoose.model('user', userSchema);

@@ -1,7 +1,7 @@
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User } = require('../models/user');
+const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
@@ -120,10 +120,9 @@ module.exports.login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
         { expiresIn: '7d' },
       );
-      return res.cookie('jwt', token, {
+      res.cookie('jwt', token, {
         maxAge: 3600000,
         httpOnly: true,
-      })
-        .send({ message: 'Вы успешно зашли' });
+      }).send({ token });
     }).catch(() => next(new UnauthorizedError('Ошибка авторизации')));
 };

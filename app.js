@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 
-const routes = require('./routes');
+const router = require('./routes');
 const InternalServerError = require('./errors/internal-server-err');
 
 const limiter = rateLimit({
@@ -23,7 +23,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(routes);
+app.use(router);
 app.use(errors());
 app.use(InternalServerError);
 
