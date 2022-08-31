@@ -20,7 +20,7 @@ module.exports.getUserById = (req, res, next) => {
     .orFail(() => next(new NotFoundError('Пользователь с таким id не найден')))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.message === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Неверный id пользователя'));
       }
       return next(err);
@@ -32,7 +32,7 @@ module.exports.getMyId = (req, res, next) => {
     .orFail(() => next(new NotFoundError('Пользователь с таким id не найден')))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.message === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError('Неверный id пользователя'));
       }
       return next(err);
@@ -64,7 +64,7 @@ module.exports.createUser = (req, res, next) => {
           if (err.code === 11000) {
             return next(new ConflictError('Такой пользователь уже существует'));
           }
-          if (err.message === 'ValidationError') {
+          if (err.name === 'ValidationError') {
             return next(new BadRequestError('Некорректные данные'));
           }
           return next(err);
@@ -85,7 +85,7 @@ module.exports.updateUserInformation = (req, res, next) => {
   ).orFail(() => next(new NotFoundError('Пользователь с таким id не найден')))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.message === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные о пользователе'));
       }
       return next(err);
@@ -104,7 +104,7 @@ module.exports.userAvatar = (req, res, next) => {
   ).orFail(() => next(new NotFoundError('Пользователь не найден')))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.message === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные для обновления аватара'));
       }
       return next(err);
