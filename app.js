@@ -8,7 +8,6 @@ const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 
 const router = require('./routes');
-const InternalServerError = require('./errors/internal-server-err');
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // Return rate limit info in the `RateLimit-*` headers
@@ -25,7 +24,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);
 app.use(errors());
-app.use(InternalServerError);
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    message: statusCode === 500
+      ? 'Ошибка на сервере'
+      : message,
+  });
+  next();
+});
 
 async function server() {
   await mongoose.connect('mongodb://localhost:27017/mestodb', {

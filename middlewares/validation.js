@@ -1,7 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 
-/* eslint no-useless-escape: 0 */
-const regEx = /^http(s)?:\/\/(www\.)?([\w\-]+)?(\.[\w]+)(\/)?([\/\w\-.+[\]()_~:\/%?#@!$&'*,;=]*)$/;
+const regEx = /^https?:\/\/(www\.)?.[\w\-.+[\]()_~:/%?#@!$&'*,;=]*$/;
 
 module.exports.createUserValidation = celebrate({
   body: Joi.object().keys({
@@ -26,7 +25,7 @@ module.exports.updateAvatarValidation = celebrate({
   }),
 });
 
-module.exports.updateCardValidation = celebrate({
+module.exports.createCardValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
     link: Joi.string().pattern(regEx).required(),
@@ -36,8 +35,7 @@ module.exports.updateCardValidation = celebrate({
 module.exports.cardIdValidation = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string()
-      .min(24)
-      .max(24)
+      .length(24)
       .hex()
       .required(),
   }),
@@ -45,16 +43,15 @@ module.exports.cardIdValidation = celebrate({
 
 module.exports.updateUserValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
+    name: Joi.string().min(2).max(30).required(),
+    about: Joi.string().min(2).max(30).required(),
   }),
 });
 
 module.exports.userIdValidation = celebrate({
   params: Joi.object().keys({
     userId: Joi.string()
-      .min(24)
-      .max(24)
+      .length(24)
       .hex()
       .required(),
   }),

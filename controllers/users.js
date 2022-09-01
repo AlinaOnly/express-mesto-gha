@@ -5,7 +5,6 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
-const UnauthorizedError = require('../errors/unauthorized-err');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -22,8 +21,9 @@ module.exports.getUserById = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Неверный id пользователя'));
+        return;
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -34,8 +34,9 @@ module.exports.getMyId = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Неверный id пользователя'));
+        return;
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -52,14 +53,13 @@ module.exports.createUser = (req, res, next) => {
         avatar,
         email,
         password: hash,
-      })
-        .then(({ _id }) => res.send({
-          name,
-          about,
-          avatar,
-          email,
-          _id,
-        }))
+      }).then((data) => res.send({
+        name: data.name,
+        about: data.about,
+        avatar: data.avatar,
+        email: data.email,
+        _id: data._id,
+      }))
         .catch((err) => {
           if (err.code === 11000) {
             return next(new ConflictError('Такой пользователь уже существует'));
@@ -87,8 +87,9 @@ module.exports.updateUserInformation = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные о пользователе'));
+        return;
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -106,14 +107,15 @@ module.exports.userAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные для обновления аватара'));
+        return;
       }
-      return next(err);
+      next(err);
     });
 };
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  return User.findUserByCredentials(email, password)
+  User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
@@ -123,6 +125,6 @@ module.exports.login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000,
         httpOnly: true,
-      }).send({ token });
-    }).catch(() => next(new UnauthorizedError('Ошибка авторизации')));
+      }).send({ message: 'Успешный вход' });
+    }).catch(next);
 };
