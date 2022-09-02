@@ -30,6 +30,9 @@ const Card = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+}, {
+  collection: 'cards',
+  versionKey: false,
 });
 
 module.exports = mongoose.model('card', Card);

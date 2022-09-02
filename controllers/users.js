@@ -16,7 +16,7 @@ module.exports.getUsers = (req, res, next) => {
 
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
-    .orFail(() => next(new NotFoundError('Пользователь с таким id не найден')))
+    .orFail(() => new NotFoundError('Пользователь с таким id не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -29,7 +29,7 @@ module.exports.getUserById = (req, res, next) => {
 
 module.exports.getMyId = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => next(new NotFoundError('Пользователь с таким id не найден')))
+    .orFail(() => new NotFoundError('Пользователь с таким id не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -82,7 +82,7 @@ module.exports.updateUserInformation = (req, res, next) => {
       new: true,
       runValidators: true,
     },
-  ).orFail(() => next(new NotFoundError('Пользователь с таким id не найден')))
+  ).orFail(() => new NotFoundError('Пользователь с таким id не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -102,7 +102,7 @@ module.exports.userAvatar = (req, res, next) => {
       new: true,
       runValidators: true,
     },
-  ).orFail(() => next(new NotFoundError('Пользователь не найден')))
+  ).orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -123,7 +123,7 @@ module.exports.login = (req, res, next) => {
         { expiresIn: '7d' },
       );
       res.cookie('jwt', token, {
-        maxAge: 3600000,
+        maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       }).send({ message: 'Успешный вход' });
     }).catch(next);
