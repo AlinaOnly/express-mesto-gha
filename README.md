@@ -1,16 +1,7 @@
-[![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+
+# Проект Mesto бэкенд
 
 14 Проектная работа - "Место" Бэкенд. Сделана на курсе по веб-разработке от Яндекс.Практикума.
-
-## Настройка бейджей статуса тестов
-
-```
-[![Tests for sprint 13](https://github.com/${AlinaOnly}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/${AlinaOnly}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml) 
-
-[![Tests for sprint 14](https://github.com/${AlinaOnly}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/${AlinaOnly}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml)
-```
-
 
 ## Директории
 
@@ -21,9 +12,11 @@
 `/errors` — папка с файлами ошибок
 
 ## Запуск проекта
+1. Ссылка на клонирование репозитория - https://github.com/AlinaOnly/express-mesto-gha.git
 
-`npm run start` — запускает сервер
-`npm run dev` — запускает сервер с hot-reload
+2. `npm run start` — запускает сервер
+
+3. `npm run dev` — запускает сервер с hot-reload
 
 ## Технологии
 
