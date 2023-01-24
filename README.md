@@ -21,7 +21,7 @@
 ## Технологии
 
 1. Node.js
-2. Exptess
+2. Express.js
 3. Postman
 5. MongoDB
 6. Mongoose
